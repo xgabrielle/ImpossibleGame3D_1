@@ -9,7 +9,7 @@ public class StartGameButton : MonoBehaviour
 {
     private void FixedUpdate()
     {
-        //transform.rotation(2, 1, 1);
+        transform.Rotate(0, 2, 0);
     }
 
     public void HoverStart()
@@ -37,13 +37,4 @@ public class StartGameButton : MonoBehaviour
     {
         SceneManager.LoadScene("GameScene");
     }
-
-    bool isTouchingGround()
-    {
-        int layermask = LayerMask.NameToLayer("Ground");
-        Physics.CheckBox(transform.position, transform.lossyScale / 2,
-            transform.rotation,layermask);
-        return true;
-    }
-    
 }
