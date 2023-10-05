@@ -21,10 +21,17 @@ public class PlayerController : MonoBehaviour
     {
         transform.Translate(speed,0,0);
         bool whenKeyIsPressed = Input.GetButtonDown("Jump");
-        if (whenKeyIsPressed&& playerOnGround)
+        if (whenKeyIsPressed&& isTouchingGround())
         {
             playerRb = GetComponent<Rigidbody>();
             playerRb.AddForce(0, jumpForce, 0);
         }
+    }
+    bool isTouchingGround()
+    {
+        int layermask = LayerMask.NameToLayer("Ground");
+        Physics.CheckBox(transform.position, transform.lossyScale / 2,
+            transform.rotation,layermask);
+        return true;
     }
 }
