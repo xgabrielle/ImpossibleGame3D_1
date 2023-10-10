@@ -1,37 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 0.1f;
-    public Rigidbody playerRb;
     public float jumpForce = 300;
+    public float jumpSpin = 2;
+    public float turnLeftNRight;
+    public float horizontalSpeed = 10;
+    public float fallGravity = -1;
+    public float fallTolerance = -.01f;
 
-    public bool playerOnGround = true;
-    // Start is called before the first frame update
-    void Start()
+    private void FixedUpdate()
     {
-        
+        Rigidbody rigidbody =gameObject.GetComponent<Rigidbody>();
+        if (rigidbody.velocity.y < fallTolerance)
+        {
+            rigidbody.AddForce(0,fallGravity,0);
+        }
+        Vector3 velocity = rigidbody.velocity;
+        velocity.x = speed;
+        rigidbody.velocity = velocity;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(speed,0,0);
         bool whenKeyIsPressed = Input.GetButtonDown("Jump");
+        turnLeftNRight = Input.GetAxis("Horizontal");
+        transform.Translate(Vector3.right*turnLeftNRight*Time.deltaTime*horizontalSpeed);
         if (whenKeyIsPressed&& isTouchingGround())
         {
-            playerRb = GetComponent<Rigidbody>();
-            playerRb.AddForce(0, jumpForce, 0);
+            Rigidbody playerRb = GetComponent<Rigidbody>();
+            Vector3 velocity = playerRb.velocity;
+            velocity.y = jumpForce;
+            playerRb.velocity = velocity;
         }
     }
     bool isTouchingGround()
     {
-        int layermask = LayerMask.NameToLayer("Ground");
-        Physics.CheckBox(transform.position, transform.lossyScale / 2,
+        int layermask = LayerMask.GetMask("Ground");
+        return Physics.CheckBox(transform.position, transform.lossyScale / 2,
             transform.rotation,layermask);
-        return true;
+    }
+    
+    void LeftNRight()
+    {
+    
+    }
+
+    void Jump()
+    {
+        
     }
 }
